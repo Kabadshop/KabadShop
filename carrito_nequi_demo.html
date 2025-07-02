@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KABÁD | Carrito</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+    }
+    h1 { text-align: center; }
+    .producto {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px;
+      background: white;
+    }
+    .carrito {
+      border: 2px solid #000;
+      padding: 15px;
+      margin-top: 30px;
+      background: #fffbe6;
+    }
+    button { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>🛒 Carrito KABÁD</h1>
+  
+  <div class="producto">
+    <h3>Camiseta Urban</h3>
+    <p>Precio: $37.990</p>
+    <button onclick="agregarAlCarrito('Camiseta Urban', 37990)">Agregar al carrito</button>
+  </div>
+
+  <div class="producto">
+    <h3>Camiseta Anime</h3>
+    <p>Precio: $42.500</p>
+    <button onclick="agregarAlCarrito('Camiseta Anime', 42500)">Agregar al carrito</button>
+  </div>
+
+  <div class="carrito">
+    <h2>🧾 Tu Carrito</h2>
+    <ul id="lista-carrito"></ul>
+    <p id="total">Total: $0</p>
+    <button onclick="finalizarCompra()">Finalizar compra</button>
+    <div id="instrucciones" style="margin-top: 20px;"></div>
+  </div>
+
+  <script>
+    const carrito = [];
+
+    function agregarAlCarrito(nombre, precio) {
+      carrito.push({ nombre, precio });
+      actualizarCarrito();
+    }
+
+    function actualizarCarrito() {
+      const lista = document.getElementById("lista-carrito");
+      const total = document.getElementById("total");
+      lista.innerHTML = "";
+      let suma = 0;
+      carrito.forEach((item, index) => {
+        suma += item.precio;
+        lista.innerHTML += `<li>${item.nombre} - $${item.precio.toLocaleString()} <button onclick="eliminarItem(${index})">❌</button></li>`;
+      });
+      total.textContent = `Total: $${suma.toLocaleString()}`;
+    }
+
+    function eliminarItem(index) {
+      carrito.splice(index, 1);
+      actualizarCarrito();
+    }
+
+    function finalizarCompra() {
+      if (carrito.length === 0) {
+        alert("Tu carrito está vacío.");
+        return;
+      }
+      let totalPagar = carrito.reduce((acc, item) => acc + item.precio, 0);
+      const instrucciones = document.getElementById("instrucciones");
+      instrucciones.innerHTML = `
+        <h3>✅ Instrucciones de Pago:</h3>
+        <p>1. Envía el total de <strong>$${totalPagar.toLocaleString()}</strong> a <strong>Nequi 3164531630</strong></p>
+        <p>2. Luego, envíanos el comprobante por WhatsApp.</p>
+        <a href="https://wa.me/573164531630" target="_blank">
+          <button>📲 Enviar comprobante por WhatsApp</button>
+        </a>
+      `;
+    }
+  </script>
+</body>
+</html>
